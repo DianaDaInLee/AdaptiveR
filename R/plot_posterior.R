@@ -21,18 +21,19 @@ plot_posterior <- function(adapt_matrix = NULL){
   post$p_text <- factor(post$arm, levels = post[post$period == period,][order(post$posterior[post$period == period], decreasing = TRUE), 'arm'])
   post_text  <- post[post$period == period,]
 
-  ggplot(data = post, aes(x = post$period, y = post$posterior, group = post$p_text, color = post$p_text)) +
+  ggplot(data = post, aes(x = post$period, y = post$posterior, color = post$p_text)) +
     geom_line() +
     coord_cartesian(xlim = c(0.5, (period + 2)),  ylim = c(0, 1), clip = 'off') +
     scale_x_continuous(breaks = c(seq(1, period, 1))) +
     scale_y_continuous(breaks = c(seq(0, 1, 0.1))) +
     scale_colour_manual(
-      name = 'Position in last period',
+      name = '',
       breaks = levels(post$p_text),
       labels = levels(post$p_text),
       values = paste0('gray', seq(0, 99, floor(99/arms)))) +
     ylab('Posterior probability of being the best arm') + xlab('Batch number') +
-    geom_text_repel(data = post_text, aes(label = post_text$p_text), nudge_x = 10, hjust = 1, segment.size = .2,
+    geom_text_repel(data = post_text, aes(x = post_text$period, y = post_text$posterior, color = post_text$p_text, label = post_text$p_text),
+                    nudge_x = 10, hjust = 1, segment.size = .2,
                     seed = 343, direction = 'y', size = 3.5) +
     theme_bw() + theme(legend.position = 'none',
                        panel.grid.minor = element_blank(),

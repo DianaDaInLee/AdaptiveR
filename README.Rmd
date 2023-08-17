@@ -81,5 +81,4 @@ p_plot
 ```{r}
 est <- adapt_est(adapt_matrix = ex_run_adapt_data)
 est$est
-est$
 ```
