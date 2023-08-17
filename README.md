@@ -14,7 +14,7 @@ probability development.
 ### Installation
 
 ``` r
-devtools::install_github('AdaptiveR')
+devtools::install_github('DianaDaInLee/AdaptiveR')
 ```
 
 ### Adaptive Experiment
