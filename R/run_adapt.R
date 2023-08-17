@@ -11,6 +11,7 @@
 #' @param periods (default = \code{NULL}) Total number of periods to be implemented in the survey.
 #' @param floor (default = \code{NULL}) A numeric value between 0 and 1 indicating the minimum probability of treatment assignment imposed on each arm.
 #' @param seed (default = 1004) Integer to specify seeds.
+#' @importFrom stats rbeta
 #' @return \code{run_adapt} returns a list containing the following elements:
 #'  \itemize{
 #'    \item \code{m_posterior}: matrix containing posterior probability for each arm (columns) for each period (rows).

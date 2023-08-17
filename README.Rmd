@@ -1,0 +1,20 @@
+---
+title: "AdaptiveR"
+output: 
+  md_document:
+    variant: markdown_github
+---
+
+Functions included in `AdaptiveR` helps users implement a simple adaptive survey design with standard Bernoulli Thompson sampling introduced in Lee and Green (2023+). It includes functions that 1) iteratively update treatment assignment probability based on Thompson sampling algorithm as new data comes in and, at the end of the experiment, 2) estimate mean outcomes using Inverse Probability Weight (IPW) estimator, 3) create a coefficient plot based on the estimated mean outcomes, and 4) create a plot visualizing over-time posterior probability development.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Installation
+
+```{r}
+devtools::install_github('AdaptiveR')
+```
+
+

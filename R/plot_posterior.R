@@ -4,44 +4,39 @@
 #'
 #' @param adapt_matrix (default = \code{NULL}) result of \code{run_adapt()}
 #' @import ggplot2
-#' @importFrom tidyr pivot_longer
+#' @importFrom ggrepel geom_text_repel
 #' @return \code{plot_posterior} returns ggplot-based plot
 #' @references Lee and Green. (2023+). Discovering optimal ballot wording using adaptive survey design.
 #' @export
 
 plot_posterior <- function(adapt_matrix = NULL){
 
-  post <- as.data.frame(adapt_matrix$m_posterior)
-  post$period <- 1:nrow(post)
-  post <- pivot_longer(data = post, cols = V1:V11)
-  post$name <- gsub('V', 'Arm ', post$name)
-  return(post)
-  # fct_ord <- as.vector(post[post$period == nrow(post),] %>% arrange(-value) %>% select(name))
-  # post$p.cat = factor(post$name, levels = fct_ord$name)
-  #
-  # post_t <- post[post$period == max(post$period),] %>%
-  #   group_by(period, name, p.cat) %>%
-  #   summarize(value = mean(value))
-  #
-  # ggplot(data = post, aes(x = period, y = value, group = name, color = p.cat, linetype = p.cat)) +
-  #   geom_line() +
-  #   coord_cartesian(xlim = c(0.5, (10 + 4)),  ylim = c(0, 0.4), clip = 'off') +
-  #   scale_x_continuous(breaks = c(seq(1, 10, 1))) +
-  #   scale_y_continuous(breaks = c(seq(0, 1, 0.1))) +
-  #   scale_colour_manual(
-  #     name = 'Position in last period',
-  #     breaks = levels(post$p.cat),
-  #     labels = levels(post$p.cat),
-  #     # values = RColorBrewer::brewer.pal(11, 'Paired')) +
-  #     values = c('red', 'blue', 'forestgreen', 'orange', paste0('gray', seq(0, 99, floor(90/7))))) +
-  #   scale_linetype_manual(name = '',
-  #                         values = c(rep('solid', 4), rep('longdash', 3), rep('dotdash', 2), rep('twodash', 2))) +
-  #   ylab('Posterior probability of being the best arm') + xlab('Batch number') +
-  #   geom_text_repel(data = post_t, aes(label = p.cat), nudge_x = 10, hjust = 1, segment.size = .2,
-  #                   seed = 343, direction = 'y', size = 3) +
-  #   theme_bw() + theme(legend.position = 'none',
-  #                      panel.grid.minor = element_blank(),
-  #                      plot.caption = element_text(hjust = 0)) -> p_posterior
+  arms <- ncol(adapt_matrix$m_posterior)
+  period <- nrow(adapt_matrix$m_posterior) - 1
+  post <- NULL
+  for (j in 1:arms){
+    post <- rbind(post, data.frame(period = 1:(period+1), arm = rep(paste('Arm', j), period+1), posterior = adapt_matrix$m_posterior[, j]))
+  }
+  post <- post[post$period <= period,]
+  post$p_text <- factor(post$arm, levels = post[post$period == period,][order(post$posterior[post$period == period], decreasing = TRUE), 'arm'])
+  post_text  <- post[post$period == period,]
 
-  # return(plot_posterior)
+  ggplot(data = post, aes(x = post$period, y = post$posterior, group = post$p_text, color = post$p_text)) +
+    geom_line() +
+    coord_cartesian(xlim = c(0.5, (period + 2)),  ylim = c(0, 1), clip = 'off') +
+    scale_x_continuous(breaks = c(seq(1, period, 1))) +
+    scale_y_continuous(breaks = c(seq(0, 1, 0.1))) +
+    scale_colour_manual(
+      name = 'Position in last period',
+      breaks = levels(post$p_text),
+      labels = levels(post$p_text),
+      values = paste0('gray', seq(0, 99, floor(99/arms)))) +
+    ylab('Posterior probability of being the best arm') + xlab('Batch number') +
+    geom_text_repel(data = post_text, aes(label = post_text$p_text), nudge_x = 10, hjust = 1, segment.size = .2,
+                    seed = 343, direction = 'y', size = 3.5) +
+    theme_bw() + theme(legend.position = 'none',
+                       panel.grid.minor = element_blank(),
+                       plot.caption = element_text(hjust = 0)) -> p_posterior
+
+  return(p_posterior)
 }
