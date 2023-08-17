@@ -91,7 +91,7 @@ run_adapt <- function(prior_survey_data = NULL, prior_adapt_matrix = NULL, curre
   }
 
   cat(paste('Treatment assignment probabilities for period', current_period, 'are as follows:\n',
-               paste(m_posterior[current_period,], collapse = ', ')))
+               paste(m_posterior[current_period,], collapse = ', '), '\n'))
 
 
   return(list(m_posterior = m_posterior, m_trials = m_trials, m_success = m_success, prior_survey_data = df))
