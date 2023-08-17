@@ -1,20 +1,85 @@
 ---
 title: "AdaptiveR"
-output: 
-  md_document:
-    variant: markdown_github
+output: github_document
 ---
 
 Functions included in `AdaptiveR` helps users implement a simple adaptive survey design with standard Bernoulli Thompson sampling introduced in Lee and Green (2023+). It includes functions that 1) iteratively update treatment assignment probability based on Thompson sampling algorithm as new data comes in and, at the end of the experiment, 2) estimate mean outcomes using Inverse Probability Weight (IPW) estimator, 3) create a coefficient plot based on the estimated mean outcomes, and 4) create a plot visualizing over-time posterior probability development.
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(AdaptiveR)
 ```
 
 ### Installation
 
-```{r}
+```{r, eval=FALSE}
 devtools::install_github('AdaptiveR')
 ```
 
-### 
+### Adaptive Experiment
+
+To demonstrate the functionalities in `AdaptieR`, we use an example of an adaptive survey experiment with 5 treatment arms sampling 50 observations over 10 periods. The function `run_adapt` allows users to compute posterior probability of being best arm using standard Bernoulli Thompson sampling. It returns matrices containing posterior probabilities, total number of observations, total successes (outcome equals 1), as well as survey data with treatment assignment probability and IPW for each observation appended as new columns. 
+
+**Arguments**
+
+* `prior_survey_data` (default = `NULL`) data.frame containing survey results from prior period. Must contain the following two columns: "arm" that contains treatment arm numbers 1 through k, and "Y" that contains binary survey outcome (0 or 1). Ignored in the first period (i.e., when `current_period` == 1).
+* `prior_adapt_matrix` (default = `NULL`) result of `run_adapt()` from the previous batch. Ignored in the first period (i.e., when `current_period` == 1).
+* `current_period` (default = `NULL`) numeric value indicating the number of current batch to be implemented (i.e., total number of batches previously done + 1). For example, if a user has conducted a survey for the first batch and is looking to update treatment probability for the second batch, the value should be 2.
+* `arms` (default = `NULL`) Total number of arms in the survey.
+* `periods` (default = `NULL`) Total number of periods to be implemented in the survey.
+* `floor` (default = `NULL`) A numeric value between 0 and 1 indicating the minimum probability of treatment assignment imposed on each arm.
+* `seed` (default = 1004) 
+
+#### Initial Period
+
+In the first period, given no survey results exist, `run_adapt` will only require `period`, `arms` and `current_period` arguments to be filled in to  generate treatment assignment probabilities as well as to initialize matrices to store information in the future periods.
+
+```{r}
+x <- run_adapt(period = 10, arms = 5, current_period = 1)
+names(x)
+head(x$m_posterior, n = 3)
+```
+The function in the first period will create three matrices---`m_posterior`, `m_trials` and `m_success`---with rows representing number of periods and columns representing total treatment arms. The first row (i.e., first period) in `m_posterior` will be filled in with the treatment assignment probability while all matrices will be entirely empty as no new data has been collected. Similarly, `prior_survey_data` will be `NULL`.
+
+#### Subsequent Period
+
+In the second period, survey results as well as the `run_adapt` object from the first period should be supplied in order to update the treatment assignment probability. We will use a fake data `result_batch1` in `ex_survey_data` created for demonstration purposes:
+
+```{r}
+data(ex_survey_data)
+result_batch1 <- ex_survey_data[ex_survey_data$period==1, c('arm', 'Y')]
+head(result_batch1, n = 3)
+```
+
+Re-run `run_adapt`:
+
+```{r}
+x <- run_adapt(current_period = 2, prior_survey_data = result_batch1, prior_adapt_matrix = x, floor = 0.02)
+
+head(x$m_posterior, n = 2)
+head(x$m_success, n = 2)
+head(x$m_trials, n = 2)
+head(x$prior_survey_data, n = 2)
+```
+
+For each of the subsequent periods, run `run_adapt` to update treatment assignment probabilities as well as to record new information as they come in. Note that, to record information from the last period, run with `current_period` set equal to the last period + 1 (i.e., 11 in the case of 10 periods). This will allow for success, trials, and survey data from the 10th period to be appended to the `run_adapt` object. 
+
+### Post Data Collection
+
+Once the data collection is completed, users can use other functions to get estimates and visualize the experiment results.
+
+#### Posterior Probability 
+
+```{r}
+data("ex_run_adapt_data")
+p_plot <- plot_posterior(adapt_matrix = ex_run_adapt_data)
+p_plot
+```
+
+#### Mean Outcome
+
+```{r}
+est <- adapt_est(adapt_matrix = ex_run_adapt_data)
+est$est
+est$
+```
