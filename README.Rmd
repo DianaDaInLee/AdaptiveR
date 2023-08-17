@@ -66,19 +66,26 @@ For each of the subsequent periods, run `run_adapt` to update treatment assignme
 
 ### Post Data Collection
 
-Once the data collection is completed, users can use other functions to get estimates and visualize the experiment results.
-
-#### Posterior Probability 
+Once the data collection is completed, users can use other functions to get estimates and visualize the experiment results. Here, we work with an example data, which is a return from `run_adapt()` after completing all 10 periods of experiment:
 
 ```{r}
 data("ex_run_adapt_data")
+```
+
+#### Posterior Probability 
+
+`plot_posterior` provides ggplot-based plot of over-time posterior probability development.
+
+```{r, warnings = F, messages = F}
 p_plot <- plot_posterior(adapt_matrix = ex_run_adapt_data)
 p_plot
 ```
 
 #### Mean Outcome
 
-```{r}
+
+```{r, warnings = F, messages = F}
 est <- adapt_est(adapt_matrix = ex_run_adapt_data)
 est$est
+est$est_plot
 ```

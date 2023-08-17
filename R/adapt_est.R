@@ -4,6 +4,7 @@
 #'
 #' @param adapt_matrix (default = \code{NULL}) result of \code{run_adapt()}
 #' @import estimatr
+#' @import ggplot2
 #' @importFrom generics tidy
 #' @importFrom forcats fct_reorder
 #' @return \code{adapt_est} returns a list containing the following elements:
