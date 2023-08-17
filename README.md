@@ -179,6 +179,10 @@ p_plot
 
 #### Mean Outcome
 
+`adapt_est` estimates inverse probability weighted estimated mean
+outcome using `estimatr::lm_robust` and creates a coefficient plot based
+on the result.
+
 ``` r
 est <- adapt_est(adapt_matrix = ex_run_adapt_data)
 est$est
@@ -194,44 +198,5 @@ est$est
 ``` r
 est$est_plot
 ```
-
-    ## Warning: Use of `moddata$estimate` is discouraged.
-    ## ℹ Use `estimate` instead.
-
-    ## Warning: Use of `moddata$term` is discouraged.
-    ## ℹ Use `term` instead.
-
-    ## Warning: Use of `moddata$conf.low` is discouraged.
-    ## ℹ Use `conf.low` instead.
-
-    ## Warning: Use of `moddata$conf.high` is discouraged.
-    ## ℹ Use `conf.high` instead.
-
-    ## Warning: Use of `moddata$estimate` is discouraged.
-    ## ℹ Use `estimate` instead.
-
-    ## Warning: Use of `moddata$term` is discouraged.
-    ## ℹ Use `term` instead.
-
-    ## Warning: Use of `moddata$conf.low` is discouraged.
-    ## ℹ Use `conf.low` instead.
-
-    ## Warning: Use of `moddata$conf.high` is discouraged.
-    ## ℹ Use `conf.high` instead.
-
-    ## Warning: Use of `moddata$label` is discouraged.
-    ## ℹ Use `label` instead.
-
-    ## Warning: Use of `moddata$estimate` is discouraged.
-    ## ℹ Use `estimate` instead.
-
-    ## Warning: Use of `moddata$term` is discouraged.
-    ## ℹ Use `term` instead.
-
-    ## Warning: Use of `moddata$conf.low` is discouraged.
-    ## ℹ Use `conf.low` instead.
-
-    ## Warning: Use of `moddata$conf.high` is discouraged.
-    ## ℹ Use `conf.high` instead.
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->

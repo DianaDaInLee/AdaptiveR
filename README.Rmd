@@ -76,15 +76,16 @@ data("ex_run_adapt_data")
 
 `plot_posterior` provides ggplot-based plot of over-time posterior probability development.
 
-```{r, warnings = F, messages = F}
+```{r, warning = FALSE, message = FALSE}
 p_plot <- plot_posterior(adapt_matrix = ex_run_adapt_data)
 p_plot
 ```
 
 #### Mean Outcome
 
+`adapt_est` estimates inverse probability weighted estimated mean outcome using `estimatr::lm_robust` and creates a coefficient plot based on the result.
 
-```{r, warnings = F, messages = F}
+```{r, warning = FALSE, message = FALSE}
 est <- adapt_est(adapt_matrix = ex_run_adapt_data)
 est$est
 est$est_plot
