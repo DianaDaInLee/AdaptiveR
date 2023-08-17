@@ -2,10 +2,21 @@ Package: AdaptiveR
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(person("Diana", "Da In Lee", email = "dl2860@columbia.edu", role = c("cre", "aut")))
+Maintainer: Diana Da In Lee <dl2860@columbia.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.5.0)
+Imports:
+    ggplot2,
+    tidyr
+RoxygenNote: 7.2.3
+URL: https://github.com/DianaDaInLee/AdaptiveR/
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
