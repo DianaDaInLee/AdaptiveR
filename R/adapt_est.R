@@ -20,25 +20,25 @@ adapt_est <- function(adapt_matrix = NULL){
   adapt_matrix$prior_survey_data$arm <- factor(adapt_matrix$prior_survey_data$arm)
   mod <- lm_robust(Y ~ arm - 1, data = adapt_matrix$prior_survey_data, weights = adapt_matrix$prior_survey_data$ipw)
 
-  data  <- tidy(mod)
+  moddata  <- tidy(mod)
   arm_n <- table(adapt_matrix$prior_survey_data$arm)
-  data$arm_n <- NA
+  moddata$arm_n <- NA
   for (i in 1:length(arm_n)){
-    data$arm_n[data$term == paste0('arm', i)] <- arm_n[i]
+    moddata$arm_n[moddata$term == paste0('arm', i)] <- arm_n[i]
   }
-  data$term <- gsub('arm', 'Arm ', data$term)
-  data$term <- fct_reorder(factor(data$term), data$estimate)
-  data$label<- paste0(sprintf("%.3f", data$estimate), ' (', sprintf("%.3f", data$std.error), ') [', data$arm_n, ']')
-  data$label<- ifelse(data$term == levels(data$term)[length(arm_n)], paste('Est (S.E.) [N]:', data$label), data$label)
+  moddata$term <- gsub('arm', 'Arm ', moddata$term)
+  moddata$term <- fct_reorder(factor(moddata$term), moddata$estimate)
+  moddata$label<- paste0(sprintf("%.3f", moddata$estimate), ' (', sprintf("%.3f", moddata$std.error), ') [', moddata$arm_n, ']')
+  moddata$label<- ifelse(moddata$term == levels(moddata$term)[length(arm_n)], paste('Est (S.E.) [N]:', moddata$label), moddata$label)
 
-  p <- ggplot(data, aes(x = data$estimate, y = data$term, xmin = data$conf.low, xmax = data$conf.high)) +
+  p <- ggplot(data = moddata, aes(x = moddata$estimate, y = moddata$term, xmin = moddata$conf.low, xmax = moddata$conf.high)) +
     geom_vline(xintercept = 0, linetype = 'dotted') +
     geom_point() +
     geom_errorbarh(height = 0) +
     xlab('Mean outcome') +
     ylab('Treatment Arm') +
     theme_bw() +
-    geom_text(aes(label = data$label), nudge_y = .3, nudge_x = 0, size = 3, show.legend = FALSE) +
+    geom_text(aes(label = moddata$label), nudge_y = .3, nudge_x = 0, size = 3, show.legend = FALSE) +
     theme(strip.background = element_blank(),
           axis.title.y = element_blank())
 
