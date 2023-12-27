@@ -201,3 +201,58 @@ est$est_plot
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+### Simulation
+
+Users can use `simulation` function to evaluate the performance of
+either static or adaptive design under settings specific to their
+research. It returns several matrices that stores simulation results as
+well as simulated statistics including RMSE, bias, and coverage that
+helps users assess optimal parameters (number of periods, arms, sample
+size). We encourage users to utilize this function to test various
+settings and identify the experimental design most appropriate for their
+research conditions and/or assess the relative benefit of adaptive
+design to static design.
+
+**Arguments**
+
+- `probs` (default = `NULL`) distribution of true mean outcomes for each
+  arm
+- `static` (default = `FALSE`) whether the simulated experiment should
+  be adaptive or static
+- `periods` (default = 10) total number of batches in a single
+  experiment (relevant for adaptive design only)
+- `n` (default = 1000) total sample size
+- `n_first` (default = `NULL`) total sample size to be allotted to the
+  first batch. If , is evenly distributed across batches
+- `floor_rate` (default = 0.01) minimum sample probability to assign to
+  ensure all arms receive non-zero sample in each batch
+- `iter` (default = 1000) number of simulations to run
+
+``` r
+sim_out <- simulate(probs = c(0.2, 0.15, 0.1, 0.1), iter = 10)
+```
+
+    ## 
+    ## -----------------------------
+    ## Adaptive simulated experiment will be performed with following parameters:
+    ##  Number of Arms: 4 
+    ##  Number of Periods: 10 
+    ##  Total Sample Size: 1000 
+    ##  Sample Size for First Period: 100 
+    ##  Sample Size for Remaining Periods: 100 
+    ## -----------------------------
+    ## 
+    ##  Iteration: 1 ..2 ..3 ..4 ..5 ..6 ..7 ..8 ..9 ..10 ..
+
+``` r
+sim_out$outmat
+```
+
+    ## # A tibble: 4 × 6
+    ##   term  true  best  bias   rmse  coverage
+    ##   <chr> <chr> <chr> <chr>  <chr> <chr>   
+    ## 1 Arm 1 0.200 1.000 -0.002 0.015 0.900   
+    ## 2 Arm 2 0.150 0.000 0.006  0.054 0.800   
+    ## 3 Arm 3 0.100 0.000 -0.024 0.079 0.800   
+    ## 4 Arm 4 0.100 0.000 0.043  0.062 0.500

@@ -96,6 +96,7 @@ est$est_plot
 Users can use `simulation` function to evaluate the performance of either static or adaptive design under settings specific to their research. It returns several matrices that stores simulation results as well as simulated statistics including RMSE, bias, and coverage that helps users assess optimal parameters (number of periods, arms, sample size). We encourage users to utilize this function to test various settings and identify the experimental design most appropriate for their research conditions and/or assess the relative benefit of adaptive design to static design.  
 
 **Arguments**
+
 * `probs` (default = `NULL`) distribution of true mean outcomes for each arm
 * `static` (default = `FALSE`) whether the simulated experiment should be adaptive or static
 * `periods` (default = 10) total number of batches in a single experiment (relevant for adaptive design only)
