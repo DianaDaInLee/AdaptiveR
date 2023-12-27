@@ -212,7 +212,7 @@ helps users assess optimal parameters (number of periods, arms, sample
 size). We encourage users to utilize this function to test various
 settings and identify the experimental design most appropriate for their
 research conditions and/or assess the relative benefit of adaptive
-design to static design.
+design to static design.[^1]
 
 **Arguments**
 
@@ -224,7 +224,7 @@ design to static design.
   experiment (relevant for adaptive design only)
 - `n` (default = 1000) total sample size
 - `n_first` (default = `NULL`) total sample size to be allotted to the
-  first batch. If , is evenly distributed across batches
+  first batch. If `NULL`, then `n` is evenly distributed across batches
 - `floor_rate` (default = 0.01) minimum sample probability to assign to
   ensure all arms receive non-zero sample in each batch
 - `iter` (default = 1000) number of simulations to run
@@ -256,3 +256,7 @@ sim_out$outmat
     ## 2 Arm 2 0.150 0.000 0.006  0.054 0.800   
     ## 3 Arm 3 0.100 0.000 -0.024 0.079 0.800   
     ## 4 Arm 4 0.100 0.000 0.043  0.062 0.500
+
+[^1]: This function is an adaptation of R scripts provided as part of
+    the replication materials of [Offer-Westort, Coppock, and Green
+    (2021)](https://onlinelibrary.wiley.com/doi/abs/10.1111/ajps.12597).
