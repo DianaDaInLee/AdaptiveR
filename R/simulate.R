@@ -9,7 +9,6 @@
 #' @param n_first (default = \code{NULL}) total sample size to be allotted to the first batch. If \code{NULL}, \code{n} is evenly distributed across batches
 #' @param floor_rate (default = \code{0.01}) minimum sample probability to implement to ensure all arms receive non-zero sample in each batch
 #' @param iter (default = \code{1000}) number of simulations to run
-#' @param ppmat (default = \code{FALSE}) whether to output the matrix of posterior probabilities for each arm for all iterations
 #' @import estimatr
 #' @import tidyr
 #' @import dplyr
@@ -57,7 +56,7 @@ simulate <- function(probs = NA, static = FALSE, periods = 10, n = 1000, n_first
     true_val  <- max(probs)
     true_vali <- paste0('zvals', which.max(probs)) # index of max probs
     postmat   <- bind_rows(postmat,
-                           bind_rows(data.frame(matrix(data = rep(1/K, 3), ncol = K)) %>% mutate(period = 1, iter = i),
+                           bind_rows(data.frame(matrix(data = rep(1/K, K), ncol = K)) %>% mutate(period = 1, iter = i),
                                      data.frame(vals$ppmat) %>% mutate(period = 2:(1+nrow(vals$ppmat)), iter = i)))
     lm_r <- ipw(vals, static)
 
