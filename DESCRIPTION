@@ -16,7 +16,12 @@ Imports:
     ggrepel,
     generics,
     estimatr,
-    stats
+    stats,
+    reshape2,
+    randomizr,
+    dplyr,
+    tidyr,
+    bandit
 RoxygenNote: 7.2.3
 URL: https://github.com/DianaDaInLee/AdaptiveR/
 Suggests: 
