@@ -15,6 +15,7 @@
 #' @import randomizr
 #' @import bandit
 #' @importFrom reshape2 melt
+#' @importFrom stats rbinom coef
 #' @return \code{simulate} returns a list containing the following elements:
 #'  \itemize{
 #'    \item \code{outmat}: simulation summary statistics containing proportion of iterations that each arm is identified as the best arm, bias, RMSE, and coverage.
