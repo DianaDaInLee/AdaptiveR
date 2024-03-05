@@ -30,7 +30,7 @@ simulate <- function(probs = NA, static = FALSE, periods = 10, n = 1000, n_first
   if (is.na(n_first) & n%%periods != 0){
     stop('`n_total` must be divisible by `periods`.')
   }
-  if (!is.na(n_first) & ((n-n_first)/(periods-1))%%periods != 0){
+  if (!is.na(n_first) & (n-n_first)%%(periods-1) != 0){
     stop('`n_total` must be divisible by `periods`.')
   }
 
